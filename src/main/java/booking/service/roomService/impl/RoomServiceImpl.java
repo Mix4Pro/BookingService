@@ -26,23 +26,23 @@ public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
     private final RoomMapper roomMapper;
 
-    @Transactional
-    public RoomResponseDto createRoom (RoomRequestDto roomRequestDto) {
-        try{
-            RoomEntity room = roomMapper.toEntityFromRequest(roomRequestDto);
-            RoomEntity savedRoom = roomRepository.save(room);
-            return roomMapper.toResponseFromEntity(savedRoom);
-        }catch (DataIntegrityViolationException e) {
-            throw new RoomNumberExistsException("Room number already exists", HttpStatus.CONFLICT);
-        }
-    }
-
-    public RoomResponseDto getRoomById(long id) {
-        RoomEntity room = roomRepository.findById(id)
-            .orElseThrow(()-> new RoomNotFoundException("Room not found",HttpStatus.NOT_FOUND));
-
-        return roomMapper.toResponseFromEntity(room);
-    }
+//    @Transactional
+//    public RoomResponseDto createRoom (RoomRequestDto roomRequestDto) {
+//        try{
+//            RoomEntity room = roomMapper.toEntityFromRequest(roomRequestDto);
+//            RoomEntity savedRoom = roomRepository.save(room);
+//            return roomMapper.toResponseFromEntity(savedRoom);
+//        }catch (DataIntegrityViolationException e) {
+//            throw new RoomNumberExistsException("Room number already exists", HttpStatus.CONFLICT);
+//        }
+//    }
+//
+//    public RoomResponseDto getRoomById(long id) {
+//        RoomEntity room = roomRepository.findById(id)
+//            .orElseThrow(()-> new RoomNotFoundException("Room not found",HttpStatus.NOT_FOUND));
+//
+//        return roomMapper.toResponseFromEntity(room);
+//    }
 
     public RoomPageResponseDto getAllRooms(Pageable pageable) {
         Page<RoomEntity> page = roomRepository.findAll(pageable);

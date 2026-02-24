@@ -39,14 +39,14 @@ public class RoomEntity {
     HotelEntity hotel;
 
     @Column(name = "room_number", nullable = false, length = 50)
-    String room;
+    String roomNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     RoomType type;
 
     @Column(name = "max_guests", nullable = false)
-    int maxGuests;
+    Integer maxGuests;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "meal_plan", nullable = false, length = 20)
@@ -58,6 +58,6 @@ public class RoomEntity {
     @OneToMany(mappedBy = "room")
     List<RoomAvailabilityEntity> roomAvailabilities;
 
-    ListOfBooking
-
+    @OneToMany(mappedBy = "room")
+    List<BookingEntity> bookings;
 }

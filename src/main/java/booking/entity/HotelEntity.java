@@ -34,7 +34,7 @@ public class HotelEntity {
     Long id;
 
     @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
+    @JoinColumn(name = "city_id", nullable = false)
     CityEntity city;
 
     @Column(nullable = false)
