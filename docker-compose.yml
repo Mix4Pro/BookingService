@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+
+  booking:
+    build: .
+    container_name: booking_microservice
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/booking_db
+      SPRING_DATASOURCE_USER: booking_db_user
+      SPRING_DATASOURCE_PASSWORD: booking_db_password
+    depends_on:
+      - postgres
+    networks:
+      - booking-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: booking-postgres
+    environment:
+      POSTGRES_DB: booking_db
+      POSTGRES_USER: booking_db_user
+      POSTGRES_PASSWORD: booking_db_password
+    ports:
+      - "3001:5432"
+    volumes:
+      - booking_db_data:/var/lib/postgresql/data
+    networks:
+      - booking-network
+
+volumes:
+  booking_db_data:
+
+networks:
+  booking-network:

@@ -1,0 +1,47 @@
+spring:
+#  APP
+  application:
+    name: booking
+
+#  Pagination
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 50
+
+#  Database settings
+  datasource:
+    url: jdbc:postgresql://localhost:3001/booking_ms_db
+    username: booking_ms_db_user
+    password: booking_ms_db_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+# Flyway settings
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+#  Kafka
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+      acks: all
+
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+      group-id: booking-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+
+server:
+  port: 8080
