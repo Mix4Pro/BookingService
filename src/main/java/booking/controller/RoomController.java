@@ -1,5 +1,6 @@
 package booking.controller;
 
+import booking.dto.request.RoomSearchRequestDto;
 import booking.dto.response.roomResponse.RoomPageResponseDto;
 import booking.dto.response.roomResponse.RoomResponseDto;
 import booking.service.roomService.RoomService;
@@ -22,5 +23,13 @@ public class RoomController {
         Pageable pageable
     ) {
         return ResponseEntity.ok(roomService.getAllRooms(pageable));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<RoomPageResponseDto> getSortedRooms (
+        RoomSearchRequestDto roomSearchRequestDto,
+        Pageable pageable
+    ) {
+        return ResponseEntity.ok(roomService.getSortedRooms(pageable,roomSearchRequestDto));
     }
 }
