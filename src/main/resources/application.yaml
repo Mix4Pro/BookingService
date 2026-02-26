@@ -43,5 +43,11 @@ spring:
       auto-offset-reset: earliest
       enable-auto-commit: false
 
+services:
+  notification:
+    url: "http://217.29.121.129/notification_api/api/notifications"
+    login: uzumtechservices
+    password: mtzmmzvhotetyza0oc
+
 server:
   port: 8080

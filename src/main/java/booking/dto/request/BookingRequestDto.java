@@ -1,24 +1,33 @@
-package booking.dto.request;
+    package booking.dto.request;
 
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+    import jakarta.validation.constraints.FutureOrPresent;
+    import jakarta.validation.constraints.Min;
+    import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
+    import java.time.LocalDate;
 
-public record BookingRequestDto(
-    @NotNull(message = "Price can't be null")
-    @Min(value = 1, message = "The price must be greater than 1 USD")
-    Double price,
+    public record BookingRequestDto(
+        @NotNull(message = "userId can't be null")
+        Long userId,
 
-    @NotNull(message = "Check in date can't be null")
-    @FutureOrPresent(message = "Check in should start from either now or some date in the future")
-    LocalDate checkIn,
+        @NotNull(message = "roomId can't be null")
+        Long roomId,
 
-    @NotNull(message = "Check out date can't be null")
-    LocalDate checkOut,
+        @NotNull(message = "rateId can't be null")
+        Long rateId,
 
-    @NotNull(message = "Room id can not be null")
-    Long roomId
-) {
-}
+        @NotNull(message = "checkInDate can't be null")
+        @FutureOrPresent(message = "checkInDate must be either present or future")
+        LocalDate checkInDate,
+
+        @NotNull(message = "checkOutDate can't be null")
+        LocalDate checkOutDate,
+
+        @NotNull
+        @Min(value = 1, message = "The minimum value of guestsCount must be 1")
+        Integer guestsCount,
+
+        @NotNull(message = "cancellationPolicyId can't be null")
+        Long cancellationPolicyId
+    ) {
+    }

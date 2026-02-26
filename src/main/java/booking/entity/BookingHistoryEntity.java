@@ -1,6 +1,7 @@
 package booking.entity;
 
 import booking.constant.enums.BookingChangeSource;
+import booking.constant.enums.BookingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,6 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +28,7 @@ import java.time.LocalDateTime;
 @Table (name = "booking_history")
 @Getter
 @Setter
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookingHistoryEntity {
     @Id
@@ -36,11 +39,13 @@ public class BookingHistoryEntity {
     @JoinColumn(name = "booking_id", nullable = false)
     RoomEntity room;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status_from", length = 50)
-    String statusFrom;
+    BookingStatus statusFrom;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status_to", nullable = false, length = 50)
-    String statusTo;
+    BookingStatus statusTo;
 
     @Column(name = "changed_at")
     LocalDateTime changedAt;

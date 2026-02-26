@@ -2,8 +2,7 @@ package booking.controller;
 
 import booking.dto.request.RoomSearchRequestDto;
 import booking.dto.response.roomResponse.RoomPageResponseDto;
-import booking.dto.response.roomResponse.RoomResponseDto;
-import booking.service.roomService.RoomService;
+import booking.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

@@ -2,12 +2,14 @@ package booking.handler;
 
 import booking.constant.enums.ErrorType;
 import booking.dto.ErrorDto;
+import booking.exception.CancellationPolicyNotFoundException;
+import booking.exception.RateNotFoundException;
 import booking.exception.bookingException.BookingCheckoutBeforeCheckInException;
 import booking.exception.bookingException.BookingStatusAlterationException;
 import booking.exception.bookingException.BookingNotFoundException;
-import booking.exception.bookingException.RoomAlreadyBookedException;
+import booking.exception.bookingException.RoomStatusNotHandleException;
+import booking.exception.UserNotFoundException;
 import booking.exception.roomException.RoomNotFoundException;
-import booking.exception.roomException.RoomNumberExistsException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,19 +26,49 @@ import java.util.List;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    // ---------- ROOM EXCEPTIONS
-    @ExceptionHandler(RoomNumberExistsException.class)
-    public ResponseEntity<ErrorDto> handleRoomExistsException(RoomNumberExistsException ex) {
-        log.error("Error : {}",ex.getMessage());
-        var errorBody = ErrorDto
+    // ---------- USER EXCEPTIONS
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleUserNotFoundException (UserNotFoundException ex) {
+        ErrorDto error = ErrorDto
             .builder()
             .code(ex.getCode())
             .message(ex.getMessage())
             .errorType(ex.getErrorType())
             .build();
 
-        return ResponseEntity.status(ex.getHttpStatus()).body(errorBody);
+        return ResponseEntity.status(ex.getHttpStatus()).body(error);
     }
+
+    // ---------- RATE EXCEPTIONS
+
+    @ExceptionHandler(RateNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleRateNotFoundException (RateNotFoundException ex) {
+        ErrorDto error = ErrorDto
+            .builder()
+            .code(ex.getCode())
+            .message(ex.getMessage())
+            .errorType(ex.getErrorType())
+            .build();
+
+        return ResponseEntity.status(ex.getHttpStatus()).body(error);
+    }
+
+    // ---------- CANCELLATION POLICY EXCEPTIONS
+
+    @ExceptionHandler(CancellationPolicyNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleCancellationPolicyNotFoundException (CancellationPolicyNotFoundException ex) {
+        ErrorDto error = ErrorDto
+            .builder()
+            .code(ex.getCode())
+            .message(ex.getMessage())
+            .errorType(ex.getErrorType())
+            .build();
+
+        return ResponseEntity.status(ex.getHttpStatus()).body(error);
+    }
+
+    // ---------- ROOM EXCEPTIONS
 
     @ExceptionHandler(RoomNotFoundException.class)
     public ResponseEntity<ErrorDto> handleRoomNotFoundException (RoomNotFoundException ex) {
@@ -64,8 +96,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(ex.getHttpStatus()).body(error);
     }
 
-    @ExceptionHandler(RoomAlreadyBookedException.class)
-    public ResponseEntity<ErrorDto> handleRoomAlreadyBookedException(RoomAlreadyBookedException ex) {
+    @ExceptionHandler(RoomStatusNotHandleException.class)
+    public ResponseEntity<ErrorDto> handleRoomAlreadyBookedException(RoomStatusNotHandleException ex) {
         ErrorDto error = ErrorDto
             .builder()
             .code(ex.getCode())

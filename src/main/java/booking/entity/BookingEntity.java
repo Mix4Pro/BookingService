@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +31,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class BookingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,9 +68,10 @@ public class BookingEntity {
     @Column(name = "prepayment_amount")
     BigDecimal prepaymentAmount;
 
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    BookingStatus status = BookingStatus.HOLD;
+    BookingStatus status;
 
     @Column(name = "hold_expires_at")
     LocalDateTime holdExpiresAt;

@@ -1,6 +1,5 @@
 package booking.mapper;
 
-import booking.dto.request.RoomRequestDto;
 import booking.dto.response.roomResponse.RoomResponseDto;
 import booking.entity.RoomEntity;
 import org.mapstruct.Mapper;

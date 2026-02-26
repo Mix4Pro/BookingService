@@ -4,8 +4,8 @@ import booking.constant.enums.ErrorType;
 import booking.exception.ApplicationException;
 import org.springframework.http.HttpStatus;
 
-public class RoomAlreadyBookedException extends ApplicationException {
-    public RoomAlreadyBookedException (String message, HttpStatus status) {
+public class RoomStatusNotHandleException extends ApplicationException {
+    public RoomStatusNotHandleException(String message, HttpStatus status) {
         super(3002,message,status,ErrorType.EXTERNAL);
     }
 }

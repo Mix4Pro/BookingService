@@ -1,6 +1,5 @@
-package booking.configuration;
+package booking.configuration.kafka;
 
-import booking.dto.event.BookingKafkaEventDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
