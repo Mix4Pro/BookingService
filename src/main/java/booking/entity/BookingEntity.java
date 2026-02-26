@@ -1,6 +1,7 @@
 package booking.entity;
 
 import booking.constant.enums.BookingStatus;
+import booking.constant.enums.PaymentPlan;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -72,6 +73,10 @@ public class BookingEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     BookingStatus status;
+
+    @Column(name = "payment_plan", nullable = false)
+    @Enumerated(EnumType.STRING)
+    PaymentPlan paymentPlan;
 
     @Column(name = "hold_expires_at")
     LocalDateTime holdExpiresAt;

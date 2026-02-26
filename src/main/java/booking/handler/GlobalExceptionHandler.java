@@ -3,13 +3,19 @@ package booking.handler;
 import booking.constant.enums.ErrorType;
 import booking.dto.ErrorDto;
 import booking.exception.CancellationPolicyNotFoundException;
+import booking.exception.payment.PaymentFailedException;
+import booking.exception.payment.PaymentIncorrectTypeException;
 import booking.exception.RateNotFoundException;
-import booking.exception.bookingException.BookingCheckoutBeforeCheckInException;
-import booking.exception.bookingException.BookingStatusAlterationException;
-import booking.exception.bookingException.BookingNotFoundException;
-import booking.exception.bookingException.RoomStatusNotHandleException;
+import booking.exception.booking.BookingCheckoutBeforeCheckInException;
+import booking.exception.booking.BookingStatusAlterationException;
+import booking.exception.booking.BookingNotFoundException;
+import booking.exception.booking.BookingStatusNotConfirmedException;
+import booking.exception.booking.RoomStatusNotHandleException;
 import booking.exception.UserNotFoundException;
-import booking.exception.roomException.RoomNotFoundException;
+import booking.exception.http.PaymentClientException;
+import booking.exception.http.PaymentServerException;
+import booking.exception.payment.PaymentNotFoundException;
+import booking.exception.room.RoomNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -100,6 +106,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDto> handleRoomAlreadyBookedException(RoomStatusNotHandleException ex) {
         ErrorDto error = ErrorDto
             .builder()
+            .code(ex.getCode())
+            .message(ex.getMessage())
+            .errorType(ex.getErrorType())
+            .build();
+
+        return ResponseEntity.status(ex.getHttpStatus()).body(error);
+    }
+
+    @ExceptionHandler(BookingStatusNotConfirmedException.class)
+    public ResponseEntity<ErrorDto> handleBookingStatusNotConfirmedException (BookingStatusNotConfirmedException ex) {
+        ErrorDto error = ErrorDto.builder()
             .code(ex.getCode())
             .message(ex.getMessage())
             .errorType(ex.getErrorType())
@@ -213,5 +230,64 @@ public class GlobalExceptionHandler {
             .build();
 
         return ResponseEntity.status(400).body(error);
+    }
+
+    // HTTP EXCEPTIONS
+
+    @ExceptionHandler(PaymentClientException.class)
+    public ResponseEntity<ErrorDto> handlePaymentClientException (PaymentClientException ex) {
+        ErrorDto error = ErrorDto.builder()
+            .code(ex.getCode())
+            .message(ex.getMessage())
+            .errorType(ex.getErrorType())
+            .build();
+
+        return ResponseEntity.status(ex.getHttpStatus()).body(error);
+    }
+
+    @ExceptionHandler (PaymentServerException.class)
+    public ResponseEntity<ErrorDto> handlePaymentServerException (PaymentServerException ex) {
+        ErrorDto error = ErrorDto.builder()
+            .code(ex.getCode())
+            .message(ex.getMessage())
+            .errorType(ex.getErrorType())
+            .build();
+
+        return ResponseEntity.status(ex.getHttpStatus()).body(error);
+    }
+
+    // PAYMENT EXCEPTIONS
+
+    @ExceptionHandler(PaymentIncorrectTypeException.class)
+    public ResponseEntity<ErrorDto> handlePaymentIncorrectTypeException (PaymentIncorrectTypeException ex) {
+        ErrorDto error = ErrorDto.builder()
+            .code(ex.getCode())
+            .message(ex.getMessage())
+            .errorType(ex.getErrorType())
+            .build();
+
+        return ResponseEntity.status(ex.getHttpStatus()).body(error);
+    }
+
+    @ExceptionHandler(PaymentNotFoundException.class)
+    public ResponseEntity<ErrorDto> handlePaymentNotFoundException (PaymentNotFoundException ex) {
+        ErrorDto error = ErrorDto.builder()
+            .code(ex.getCode())
+            .message(ex.getMessage())
+            .errorType(ex.getErrorType())
+            .build();
+
+        return ResponseEntity.status(ex.getHttpStatus()).body(error);
+    }
+
+    @ExceptionHandler(PaymentFailedException.class)
+    public ResponseEntity<ErrorDto> handlePaymentFailedException (PaymentFailedException ex) {
+        ErrorDto error = ErrorDto.builder()
+            .code(ex.getCode())
+            .message(ex.getMessage())
+            .errorType(ex.getErrorType())
+            .build();
+
+        return ResponseEntity.status(ex.getHttpStatus()).body(error);
     }
 }

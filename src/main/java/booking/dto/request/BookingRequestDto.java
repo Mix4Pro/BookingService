@@ -1,5 +1,6 @@
     package booking.dto.request;
 
+    import booking.constant.enums.PaymentPlan;
     import jakarta.validation.constraints.FutureOrPresent;
     import jakarta.validation.constraints.Min;
     import jakarta.validation.constraints.NotNull;
@@ -28,6 +29,9 @@
         Integer guestsCount,
 
         @NotNull(message = "cancellationPolicyId can't be null")
-        Long cancellationPolicyId
+        Long cancellationPolicyId,
+
+        @NotNull(message = "cancellationPolicyId can't be null")
+        PaymentPlan paymentPlan
     ) {
     }

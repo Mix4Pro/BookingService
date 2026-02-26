@@ -37,7 +37,7 @@ public class BookingHistoryEntity {
 
     @ManyToOne
     @JoinColumn(name = "booking_id", nullable = false)
-    RoomEntity room;
+    BookingEntity booking;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_from", length = 50)

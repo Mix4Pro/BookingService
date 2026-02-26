@@ -15,7 +15,7 @@ import org.springframework.web.client.RestClient;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class BookingKafkaConsumer {
+public class NotificationKafkaConsumer {
     private final RestClient notificationRestClient;
     private final NotificationAdapter notificationAdapter;
 
@@ -24,14 +24,28 @@ public class BookingKafkaConsumer {
         groupId = "booking-confirmed-group"
     )
 
-    public void handleBookingConfirmed (
+    public void handleBookingConfirmedEvent (
         @Payload @Valid NotificationEvent event
     ) {
         NotificationRequestDto notificationRequestDto = NotificationRequestDto.fromEvent(event);
 
         log.info("EVENT receiver = {}, type = {}",event.receiver(),event.type());
 
-        // Я не сделал Exception так как не успел
+        NotificationResponseDto notificationResponseDto = notificationAdapter.sendNotification(notificationRequestDto);
+    }
+
+    @KafkaListener(
+        topics = "booking-after-payment",
+        groupId = "booking-after-payment-group"
+    )
+
+    public void handleBookingAfterPaymentEvent (
+        @Payload @Valid NotificationEvent event
+    ) {
+        NotificationRequestDto notificationRequestDto = NotificationRequestDto.fromEvent(event);
+
+        log.info("EVENT receiver = {}, type = {}",event.receiver(),event.type());
+
         NotificationResponseDto notificationResponseDto = notificationAdapter.sendNotification(notificationRequestDto);
     }
 }

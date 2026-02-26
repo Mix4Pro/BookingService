@@ -49,5 +49,10 @@ services:
     login: uzumtechservices
     password: mtzmmzvhotetyza0oc
 
+  jbank:
+    url: "http://217.29.121.129/bank_api"
+    merchant-id: 17374506-c373-45ad-809a-46d93e3aa8e2
+    merchant-token: 4c486a4c-cb98-424a-8cd3-c34a9fd76985
+
 server:
   port: 8080

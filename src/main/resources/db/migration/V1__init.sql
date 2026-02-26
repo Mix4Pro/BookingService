@@ -66,7 +66,9 @@ CREATE TABLE cancellation_policies (
 
 CREATE TABLE users (
 	id BIGSERIAL PRIMARY KEY,
-	name VARCHAR(255) NOT NULL,
+	first_name VARCHAR(255) NOT NULL,
+	last_name VARCHAR(255) NOT NULL,
+	card_token VARCHAR(255) NOT NULL,
 	email VARCHAR(255) NOT NULL UNIQUE,
 	phone VARCHAR(20) NOT NULL
 );
@@ -83,6 +85,7 @@ CREATE TABLE bookings (
 	total_amount DECIMAL(10,2) NOT NULL,
 	prepayment_amount DECIMAL (10,2),
 	status VARCHAR(20) NOT NULL DEFAULT 'HOLD',
+	payment_plan VARCHAR(20) NOT NULL,
 	hold_expires_at TIMESTAMP,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -103,6 +106,6 @@ CREATE TABLE payment_history (
 	type VARCHAR(10) NOT NULL, -- CHARGE или REFUND
 	amount DECIMAL (10,2) NOT NULL,
 	status VARCHAR(10) NOT NULL, -- SUCCESS или FAILED
-	bank_transaction_id VARCHAR(255),
+	bank_transaction_id UUID,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

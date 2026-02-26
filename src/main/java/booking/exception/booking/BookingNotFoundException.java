@@ -1,4 +1,4 @@
-package booking.exception.bookingException;
+package booking.exception.booking;
 
 import booking.constant.enums.ErrorType;
 import booking.exception.ApplicationException;

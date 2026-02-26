@@ -303,9 +303,9 @@ VALUES
 
 
 ---------------------------------- Add users --------------------------------------------
-INSERT INTO users (name,email,phone) VALUES
-	('Lebron James', 'lebron06@gmail.com', '998060060606'),
-	('Michael Jordan', 'jordan23@gmail.com', '998232232323'),
-	('Giannis Antetokounmpo', 'giannis@gmail.com', '998343343434');
+INSERT INTO users (first_name,last_name,card_token,email,phone) VALUES
+	('Lebron','James', '79c3d4a3-6467-43dd-89f4-6c38f4f1ee5c', 'master07n.n@gmail.com', '998060060606'),
+	('Michael','Jordan', '79c3d4a3-6467-43dd-89f4-6c38f4f1ee5c', 'yaelseba21@gmail.com', '998232232323'),
+	('Giannis', 'Antetokounmpo' , '79c3d4a3-6467-43dd-89f4-6c38f4f1ee5c', 'mixprom100@gmail.com', '998343343434');
 
 

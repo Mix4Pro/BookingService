@@ -15,10 +15,11 @@ import booking.entity.UserEntity;
 import booking.exception.CancellationPolicyNotFoundException;
 import booking.exception.RateNotFoundException;
 import booking.exception.UserNotFoundException;
-import booking.exception.bookingException.BookingCheckoutBeforeCheckInException;
-import booking.exception.bookingException.BookingNotFoundException;
-import booking.exception.bookingException.RoomStatusNotHandleException;
-import booking.exception.roomException.RoomNotFoundException;
+import booking.exception.booking.BookingCheckoutBeforeCheckInException;
+import booking.exception.booking.BookingNotFoundException;
+import booking.exception.booking.BookingStatusNotConfirmedException;
+import booking.exception.booking.RoomStatusNotHandleException;
+import booking.exception.room.RoomNotFoundException;
 import booking.mapper.BookingMapper;
 import booking.repository.BookingHistoryRepository;
 import booking.repository.BookingRepository;
@@ -115,6 +116,7 @@ public class BookingServiceImpl implements BookingService {
                 .totalAmount(totalAmount)
                 .prepaymentAmount(prepaymentAmount)
                 .status(BookingStatus.HOLD)
+                .paymentPlan(bookingRequestDto.paymentPlan())
                 .createdAt(LocalDateTime.now())
                 .holdExpiresAt(LocalDateTime.now().plusMinutes(15))
             .build();
@@ -124,7 +126,7 @@ public class BookingServiceImpl implements BookingService {
         // Saving in the booking history
         BookingHistoryEntity bookingHistory = BookingHistoryEntity
             .builder()
-            .room(booking.getRoom())
+            .booking(booking)
             .statusFrom(null)
             .statusTo(BookingStatus.HOLD)
             .changedAt(LocalDateTime.now())
@@ -173,7 +175,7 @@ public class BookingServiceImpl implements BookingService {
 
         BookingHistoryEntity bookingHistory = BookingHistoryEntity
             .builder()
-            .room(booking.getRoom())
+            .booking(booking)
             .statusFrom(BookingStatus.HOLD)
             .statusTo(BookingStatus.CONFIRMED)
             .changedAt(LocalDateTime.now())
@@ -184,8 +186,39 @@ public class BookingServiceImpl implements BookingService {
 
         bookingHistoryRepository.save(bookingHistory);
 
-        bookingKafkaProducer.sendBookingConfirmedEvent(booking);
+        bookingKafkaProducer.sendBookingNotification(booking);
 
         return bookingMapper.toResponseFromEntity(booking);
     }
+
+    public BookingResponseDto cancel(Long bookingId) {
+        BookingEntity booking = bookingRepository.findById(bookingId)
+            .orElseThrow(() -> new BookingNotFoundException("Booking not found", HttpStatus.NOT_FOUND));
+
+        if (!booking.getStatus().equals(BookingStatus.HOLD) &&
+            !booking.getStatus().equals(BookingStatus.CONFIRMED)) {
+            throw new BookingStatusNotConfirmedException(
+                "Only HOLD or CONFIRMED bookings can be cancelled", HttpStatus.CONFLICT);
+        }
+
+        BookingStatus previousStatus = booking.getStatus();
+        booking.setStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
+
+        BookingHistoryEntity history = BookingHistoryEntity.builder()
+            .booking(booking)
+            .statusFrom(previousStatus)
+            .statusTo(BookingStatus.CANCELLED)
+            .changedAt(LocalDateTime.now())
+            .changedBy(BookingChangeSource.USER)
+            .comment("Booking cancelled by user")
+            .build();
+        bookingHistoryRepository.save(history);
+
+        bookingKafkaProducer.sendBookingNotification(booking);
+
+        log.info("Booking cancelled: bookingId={}", bookingId);
+        return bookingMapper.toResponseFromEntity(booking);
+    }
+
 }

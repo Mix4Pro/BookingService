@@ -21,6 +21,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -35,7 +36,7 @@ public class PaymentHistoryEntity {
     Long id;
 
     @ManyToOne
-    @JoinColumn(name = "payment_history", nullable = false)
+    @JoinColumn(name = "booking_id", nullable = false)
     BookingEntity booking;
 
     @Column(nullable = false)
@@ -50,7 +51,7 @@ public class PaymentHistoryEntity {
     PaymentHistoryPaymentStatus status;
 
     @Column(name = "bank_transaction_id")
-    String bankTransactionId;
+    UUID bankTransactionId;
 
     @Column(name = "created_at")
     LocalDateTime createdAt;

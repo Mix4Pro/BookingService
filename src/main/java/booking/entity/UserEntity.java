@@ -26,8 +26,14 @@ public class UserEntity {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(nullable = false)
-    String name;
+    @Column(name = "first_name", nullable = false)
+    String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    String lastName;
+
+    @Column(name = "card_token", nullable = false)
+    String cardToken;
 
     @Column(nullable = false, unique = true)
     String email;
