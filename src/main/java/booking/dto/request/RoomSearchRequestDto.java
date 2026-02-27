@@ -26,7 +26,7 @@ public record RoomSearchRequestDto(
 
     Double minRating,
 
-    List<Long>amenityIds,
+    List<Long> amenityIds,
 
     String brand
 

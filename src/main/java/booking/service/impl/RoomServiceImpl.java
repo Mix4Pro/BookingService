@@ -28,33 +28,33 @@ public class RoomServiceImpl implements RoomService {
         List<RoomResponseDto> pageContent = roomMapper.toListOfResponseFromListOfEntities(page.getContent());
 
         return new RoomPageResponseDto(
-            pageContent,
-            page.getNumber(),
-            page.getSize(),
-            page.getTotalElements(),
-            page.getTotalPages()
+                pageContent,
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
         );
     }
 
-    public RoomPageResponseDto getSortedRooms (Pageable pageable, RoomSearchRequestDto roomSearchRequestDto) {
+    public RoomPageResponseDto getSortedRooms(Pageable pageable, RoomSearchRequestDto roomSearchRequestDto) {
         Specification<RoomEntity> spec = Specification
-            .where(RoomSpecification.byCity(roomSearchRequestDto.cityId()))
-            .and(RoomSpecification.byGuests(roomSearchRequestDto.guests()))
-            .and(RoomSpecification.byRoomType(roomSearchRequestDto.roomType()))
-            .and(RoomSpecification.byMealPlan(roomSearchRequestDto.mealPlan()))
-            .and(RoomSpecification.byMinRating(roomSearchRequestDto.minRating()))
-            .and(RoomSpecification.isAvailable(roomSearchRequestDto.checkIn(), roomSearchRequestDto.checkOut()));
+                .where(RoomSpecification.byCity(roomSearchRequestDto.cityId()))
+                .and(RoomSpecification.byGuests(roomSearchRequestDto.guests()))
+                .and(RoomSpecification.byRoomType(roomSearchRequestDto.roomType()))
+                .and(RoomSpecification.byMealPlan(roomSearchRequestDto.mealPlan()))
+                .and(RoomSpecification.byMinRating(roomSearchRequestDto.minRating()))
+                .and(RoomSpecification.isAvailable(roomSearchRequestDto.checkIn(), roomSearchRequestDto.checkOut()));
 
-        Page<RoomEntity> rooms = roomRepository.findAll(spec,pageable);
+        Page<RoomEntity> rooms = roomRepository.findAll(spec, pageable);
 
         List<RoomResponseDto> pageContent = roomMapper.toListOfResponseFromListOfEntities(rooms.getContent());
 
         return new RoomPageResponseDto(
-            pageContent,
-            rooms.getNumber(),
-            rooms.getSize(),
-            rooms.getTotalElements(),
-            rooms.getTotalPages()
+                pageContent,
+                rooms.getNumber(),
+                rooms.getSize(),
+                rooms.getTotalElements(),
+                rooms.getTotalPages()
         );
     }
 

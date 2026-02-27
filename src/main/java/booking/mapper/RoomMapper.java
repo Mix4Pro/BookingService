@@ -9,10 +9,9 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface RoomMapper {
-//    RoomEntity toEntityFromRequest (RoomRequestDto roomRequestDto);
 
     @Mapping(target = "hotelId", source = "hotel.id")
-    RoomResponseDto toResponseFromEntity (RoomEntity roomEntity);
+    RoomResponseDto toResponseFromEntity(RoomEntity roomEntity);
 
-    List<RoomResponseDto> toListOfResponseFromListOfEntities (List<RoomEntity> roomEntities);
+    List<RoomResponseDto> toListOfResponseFromListOfEntities(List<RoomEntity> roomEntities);
 }

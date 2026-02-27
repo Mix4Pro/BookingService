@@ -1,9 +1,7 @@
 package booking.component.kafka.producer;
 
-import booking.constant.enums.BookingStatus;
 import booking.constant.enums.CurrencyType;
 import booking.constant.enums.NotificationType;
-import booking.constant.enums.PaymentStatus;
 import booking.constant.enums.PaymentType;
 import booking.dto.event.NotificationEvent;
 import booking.dto.event.PaymentEvent;
@@ -29,50 +27,50 @@ public class BookingKafkaProducer {
 
     private static final String PAYMENT_REQUEST_TOPIC = "payment-request";
 
-    private final KafkaTemplate<String,Object> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     private final BookingMapper bookingMapper;
 
-    public void sendBookingNotification (BookingEntity booking) {
+    public void sendBookingNotification(BookingEntity booking) {
         UUID randomId = UUID.randomUUID();
         NotificationEvent event = new NotificationEvent(
-            randomId,
-            booking.getUser().getEmail(),
-            NotificationType.EMAIL,
-            "Booking with an id: " + booking.getId() + " is now " + booking.getStatus()
+                randomId,
+                booking.getUser().getEmail(),
+                NotificationType.EMAIL,
+                "Booking with an id: " + booking.getId() + " is now " + booking.getStatus()
         );
 
-        CompletableFuture<SendResult<String,Object>> future = kafkaTemplate.send(
-            BOOKING_CONFIRMED_TOPIC,
-            event
+        CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(
+                BOOKING_CONFIRMED_TOPIC,
+                event
         );
 
-        future.whenComplete((result,ex)->{
-           if(ex != null) {
-               log.error("Error happened while sending to kafka , id : {} \n Message : {}",
-                   booking.getId(),
-                   ex.getMessage()
-               );
-           }
+        future.whenComplete((result, ex) -> {
+            if (ex != null) {
+                log.error("Error happened while sending to kafka , id : {} \n Message : {}",
+                        booking.getId(),
+                        ex.getMessage()
+                );
+            }
 
-           log.info("Sent to kafka broker, id : {}", booking.getId());
+            log.info("Sent to kafka broker, id : {}", booking.getId());
         });
     }
 
-    public void sendBookingPayment (
-        PaymentHistoryEntity paymentHistory,
-        BookingEntity booking,
-        CurrencyType currency
+    public void sendBookingPayment(
+            PaymentHistoryEntity paymentHistory,
+            BookingEntity booking,
+            CurrencyType currency
     ) {
         UserEntity user = booking.getUser();
         PaymentEvent event = new PaymentEvent(
-            paymentHistory.getId(),
-            booking.getId(),
-            user.getFirstName() + " " + user.getLastName(),
-            user.getCardToken(),
-            booking.getPrepaymentAmount(),
-            currency,
-            PaymentType.CHARGE
+                paymentHistory.getId(),
+                booking.getId(),
+                user.getFirstName() + " " + user.getLastName(),
+                user.getCardToken(),
+                booking.getPrepaymentAmount(),
+                currency,
+                PaymentType.CHARGE
         );
 
         kafkaTemplate.send(PAYMENT_REQUEST_TOPIC, event);
@@ -82,13 +80,13 @@ public class BookingKafkaProducer {
     public void sendBookingRefund(PaymentHistoryEntity refund, BookingEntity booking) {
         UserEntity user = booking.getUser();
         PaymentEvent event = new PaymentEvent(
-            refund.getId(),
-            booking.getId(),
-            user.getFirstName() + " " + user.getLastName(),
-            user.getCardToken(),
-            refund.getAmount(),
-            CurrencyType.USD,
-            PaymentType.REFUND
+                refund.getId(),
+                booking.getId(),
+                user.getFirstName() + " " + user.getLastName(),
+                user.getCardToken(),
+                refund.getAmount(),
+                CurrencyType.USD,
+                PaymentType.REFUND
         );
 
         kafkaTemplate.send(PAYMENT_REQUEST_TOPIC, event);

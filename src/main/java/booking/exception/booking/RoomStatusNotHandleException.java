@@ -6,6 +6,6 @@ import org.springframework.http.HttpStatus;
 
 public class RoomStatusNotHandleException extends ApplicationException {
     public RoomStatusNotHandleException(String message, HttpStatus status) {
-        super(3002,message,status,ErrorType.EXTERNAL);
+        super(3002, message, status, ErrorType.EXTERNAL);
     }
 }

@@ -12,7 +12,8 @@ import org.springframework.web.client.RestClient;
 @Slf4j
 public class NotificationAdapter {
     private final RestClient notificationRestClient;
-    public NotificationResponseDto sendNotification (NotificationRequestDto notificationRequestDto) {
+
+    public NotificationResponseDto sendNotification(NotificationRequestDto notificationRequestDto) {
         var notificationResponseDto =
             notificationRestClient
                 .post()
@@ -20,7 +21,6 @@ public class NotificationAdapter {
                 .body(notificationRequestDto)
                 .retrieve()
                 .toEntity(NotificationResponseDto.class);
-
 
 
         return notificationResponseDto.getBody();

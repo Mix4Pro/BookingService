@@ -5,7 +5,7 @@ import booking.exception.ApplicationException;
 import org.springframework.http.HttpStatus;
 
 public class PaymentNotFoundException extends ApplicationException {
-    public PaymentNotFoundException (String message, HttpStatus status) {
-        super(8002, message,status, ErrorType.EXTERNAL);
+    public PaymentNotFoundException(String message, HttpStatus status) {
+        super(8002, message, status, ErrorType.EXTERNAL);
     }
 }

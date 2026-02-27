@@ -12,23 +12,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/room")
+@RequestMapping("/api/v1/room")
 public class RoomController {
 
     private final RoomService roomService;
 
     @GetMapping
-    public ResponseEntity<RoomPageResponseDto> getAllRooms (
+    public ResponseEntity<RoomPageResponseDto> getAllRooms(
         Pageable pageable
     ) {
         return ResponseEntity.ok(roomService.getAllRooms(pageable));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<RoomPageResponseDto> getSortedRooms (
+    public ResponseEntity<RoomPageResponseDto> getSortedRooms(
         RoomSearchRequestDto roomSearchRequestDto,
         Pageable pageable
     ) {
-        return ResponseEntity.ok(roomService.getSortedRooms(pageable,roomSearchRequestDto));
+        return ResponseEntity.ok(roomService.getSortedRooms(pageable, roomSearchRequestDto));
     }
 }

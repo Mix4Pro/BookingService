@@ -1,22 +1,17 @@
 package booking.service.impl;
 
 import booking.component.kafka.producer.BookingKafkaProducer;
-import booking.constant.enums.BookingChangeSource;
 import booking.constant.enums.BookingStatus;
 import booking.constant.enums.PaymentHistoryPaymentStatus;
 import booking.constant.enums.PaymentHistoryPaymentType;
+import booking.constant.enums.PaymentPlan;
 import booking.dto.request.PaymentRequestDto;
 import booking.dto.response.PaymentHistoryResponseDto;
-import booking.dto.response.PaymentResponseDto;
-import booking.dto.response.bookingResponse.BookingResponseDto;
 import booking.entity.BookingEntity;
-import booking.entity.BookingHistoryEntity;
 import booking.entity.PaymentHistoryEntity;
 import booking.exception.booking.BookingNotFoundException;
 import booking.exception.booking.BookingStatusNotConfirmedException;
-import booking.mapper.BookingMapper;
 import booking.mapper.PaymentMapper;
-import booking.repository.BookingHistoryRepository;
 import booking.repository.BookingRepository;
 import booking.repository.PaymentHistoryRepository;
 import booking.service.PaymentService;
@@ -39,12 +34,10 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentHistoryRepository paymentHistoryRepository;
     private final BookingKafkaProducer bookingKafkaProducer;
     private final PaymentMapper paymentMapper;
-    private final BookingHistoryRepository bookingHistoryRepository;
-    private final BookingMapper bookingMapper;
 
     public PaymentHistoryResponseDto charge(Long bookingId, PaymentRequestDto paymentRequestDto) {
         BookingEntity booking = bookingRepository.findById(bookingId)
-            .orElseThrow(() -> new BookingNotFoundException("Booking not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new BookingNotFoundException("Booking not found", HttpStatus.NOT_FOUND));
 
         if (!booking.getStatus().equals(BookingStatus.CONFIRMED)) {
             throw new BookingStatusNotConfirmedException("Booking must be CONFIRMED", HttpStatus.CONFLICT);
@@ -52,11 +45,11 @@ public class PaymentServiceImpl implements PaymentService {
 
         BigDecimal chargeAmount = switch (booking.getPaymentPlan()) {
             case PREPAYMENT -> booking.getPrepaymentAmount();  // 30%
-            case FULL       -> booking.getTotalAmount();        // 100%
-            case NO_PREPAY  -> {
+            case FULL -> booking.getTotalAmount();        // 100%
+            case NO_PREPAY -> {
                 throw new BookingStatusNotConfirmedException(
-                    "This booking has NO_PREPAY plan — payment at check-in",
-                    HttpStatus.CONFLICT);
+                        "This booking has NO_PREPAY plan — payment at check-in",
+                        HttpStatus.CONFLICT);
             }
         };
 
@@ -76,13 +69,25 @@ public class PaymentServiceImpl implements PaymentService {
 
     public PaymentHistoryResponseDto refund(Long bookingId) {
         BookingEntity booking = bookingRepository.findById(bookingId)
-            .orElseThrow(() -> new BookingNotFoundException("Booking not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new BookingNotFoundException("Booking not found", HttpStatus.NOT_FOUND));
 
         if (!booking.getStatus().equals(BookingStatus.PAID)) {
             throw new BookingStatusNotConfirmedException("Booking must be PAID for refund", HttpStatus.CONFLICT);
         }
 
+        if (booking.getPaymentPlan() == PaymentPlan.NO_PREPAY) {
+            throw new BookingStatusNotConfirmedException(
+                    "NO_PREPAY bookings cannot be refunded — nothing was charged",
+                    HttpStatus.CONFLICT);
+        }
+
         BigDecimal refundAmount = calculateRefundAmount(booking);
+
+        if (refundAmount.compareTo(BigDecimal.ZERO) == 0) {
+            throw new BookingStatusNotConfirmedException(
+                    "Refund amount is 0 , cancellation deadline has passed",
+                    HttpStatus.CONFLICT);
+        }
 
         PaymentHistoryEntity refund = new PaymentHistoryEntity();
         refund.setBooking(booking);
@@ -102,21 +107,21 @@ public class PaymentServiceImpl implements PaymentService {
     private BigDecimal calculateRefundAmount(BookingEntity booking) {
         var policy = booking.getCancellationPolicy();
         long hoursUntilCheckIn = ChronoUnit.HOURS.between(
-            LocalDateTime.now(),
-            booking.getCheckInDate().atStartOfDay()
+                LocalDateTime.now(),
+                booking.getCheckInDate().atStartOfDay()
         );
 
         BigDecimal chargedAmount = switch (booking.getPaymentPlan()) {
             case PREPAYMENT -> booking.getPrepaymentAmount();  // 30%
-            case FULL       -> booking.getTotalAmount();        // 100%
-            case NO_PREPAY  -> BigDecimal.ZERO;                 // не достигнем
+            case FULL -> booking.getTotalAmount();        // 100%
+            case NO_PREPAY -> BigDecimal.ZERO;                 // не достигнем
         };
 
 
         if (hoursUntilCheckIn >= policy.getHoursBeforeCheckIn()) {
             return chargedAmount
-                .multiply(policy.getRefundPercentage())
-                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                    .multiply(policy.getRefundPercentage())
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
         }
 
         return BigDecimal.ZERO;

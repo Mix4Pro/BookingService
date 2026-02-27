@@ -6,6 +6,6 @@ import org.springframework.http.HttpStatus;
 
 public class PaymentClientException extends ApplicationException {
     public PaymentClientException(String message, HttpStatus status) {
-        super(7001,message,status, ErrorType.EXTERNAL);
+        super(7001, message, status, ErrorType.EXTERNAL);
     }
 }

@@ -1,9 +1,6 @@
 package booking.repository;
 
-import booking.constant.enums.BookingStatus;
 import booking.entity.BookingEntity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,15 +9,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface BookingRepository extends JpaRepository<BookingEntity,Long> {
+public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
     @Query("""
-    SELECT b FROM BookingEntity b
-    WHERE b.room.id = :roomId
-        AND (b.status = 'CONFIRMED' OR b.status = 'PAID' OR b.status = 'COMPLETED'
-             OR (b.status = 'HOLD' AND b.holdExpiresAt > :now))
-        AND b.checkInDate < :checkOut
-        AND b.checkOutDate > :checkIn
-    """)
+        SELECT b FROM BookingEntity b
+        WHERE b.room.id = :roomId
+            AND (b.status = 'CONFIRMED' OR b.status = 'PAID' OR b.status = 'COMPLETED'
+                 OR (b.status = 'HOLD' AND b.holdExpiresAt > :now))
+            AND b.checkInDate < :checkOut
+            AND b.checkOutDate > :checkIn
+        """)
     List<BookingEntity> findConflictingBookings(
         @Param("roomId") Long roomId,
         @Param("checkOut") LocalDate checkOut,

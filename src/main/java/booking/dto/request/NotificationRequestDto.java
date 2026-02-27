@@ -8,8 +8,6 @@ public record NotificationRequestDto(
     NotificationType type,
     String text
 ) {
-    public record NotificationReceiver (String email, String phone, String firebaseToken) {}
-
     public static NotificationRequestDto sms(String phone, String text) {
         var receiver = new NotificationReceiver(null, phone, null);
 
@@ -35,5 +33,7 @@ public record NotificationRequestDto(
             case PUSH -> NotificationRequestDto.push(event.receiver(), event.text());
         };
     }
+
+    public record NotificationReceiver(String email, String phone, String firebaseToken) {}
 
 }

@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table (name = "rates")
+@Table(name = "rates")
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -32,16 +32,16 @@ public class RateEntity {
     Long id;
 
     @ManyToOne
-    @JoinColumn(name = "room_id",nullable = false)
+    @JoinColumn(name = "room_id", nullable = false)
     RoomEntity room;
 
     @Column(name = "price_per_night", nullable = false)
     BigDecimal pricePerNight;
 
-    @Column(name = "valid_from",nullable = false)
+    @Column(name = "valid_from", nullable = false)
     LocalDate validFrom;
 
-    @Column(name = "valid_to",nullable = false)
+    @Column(name = "valid_to", nullable = false)
     LocalDate validTo;
 
     @Column(name = "created_at", nullable = false)

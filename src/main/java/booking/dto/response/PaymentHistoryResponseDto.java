@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record PaymentHistoryResponseDto (
+public record PaymentHistoryResponseDto(
     Long id,
     Long bookingId,
     PaymentHistoryPaymentType type,

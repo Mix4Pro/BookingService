@@ -6,6 +6,6 @@ import org.springframework.http.HttpStatus;
 
 public class PaymentIncorrectTypeException extends ApplicationException {
     public PaymentIncorrectTypeException(String message, HttpStatus status) {
-        super(8001,message,status, ErrorType.EXTERNAL);
+        super(8001, message, status, ErrorType.EXTERNAL);
     }
 }

@@ -26,7 +26,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table (name = "payment_history")
+@Table(name = "payment_history")
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)

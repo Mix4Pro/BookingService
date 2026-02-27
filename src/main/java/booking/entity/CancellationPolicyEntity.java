@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table (name = "cancellation_policies")
+@Table(name = "cancellation_policies")
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)

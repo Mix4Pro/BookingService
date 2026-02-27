@@ -1,6 +1,5 @@
 package booking.dto.response.bookingResponse;
 
-import booking.constant.enums.BookingStatus;
 
 import java.time.LocalDate;
 

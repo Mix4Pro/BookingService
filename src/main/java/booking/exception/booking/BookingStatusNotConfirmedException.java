@@ -5,7 +5,7 @@ import booking.exception.ApplicationException;
 import org.springframework.http.HttpStatus;
 
 public class BookingStatusNotConfirmedException extends ApplicationException {
-    public BookingStatusNotConfirmedException (String message, HttpStatus status) {
-        super(3005,message,status, ErrorType.EXTERNAL);
+    public BookingStatusNotConfirmedException(String message, HttpStatus status) {
+        super(3005, message, status, ErrorType.EXTERNAL);
     }
 }

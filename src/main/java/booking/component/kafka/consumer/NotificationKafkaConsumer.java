@@ -24,12 +24,12 @@ public class NotificationKafkaConsumer {
         groupId = "booking-confirmed-group"
     )
 
-    public void handleBookingConfirmedEvent (
+    public void handleBookingConfirmedEvent(
         @Payload @Valid NotificationEvent event
     ) {
         NotificationRequestDto notificationRequestDto = NotificationRequestDto.fromEvent(event);
 
-        log.info("EVENT receiver = {}, type = {}",event.receiver(),event.type());
+        log.info("EVENT receiver = {}, type = {}", event.receiver(), event.type());
 
         NotificationResponseDto notificationResponseDto = notificationAdapter.sendNotification(notificationRequestDto);
     }
@@ -39,12 +39,12 @@ public class NotificationKafkaConsumer {
         groupId = "booking-after-payment-group"
     )
 
-    public void handleBookingAfterPaymentEvent (
+    public void handleBookingAfterPaymentEvent(
         @Payload @Valid NotificationEvent event
     ) {
         NotificationRequestDto notificationRequestDto = NotificationRequestDto.fromEvent(event);
 
-        log.info("EVENT receiver = {}, type = {}",event.receiver(),event.type());
+        log.info("EVENT receiver = {}, type = {}", event.receiver(), event.type());
 
         NotificationResponseDto notificationResponseDto = notificationAdapter.sendNotification(notificationRequestDto);
     }

@@ -1,5 +1,5 @@
 package booking.constant.enums;
 
 public enum ErrorType {
-    VALIDATION,INTERNAL,EXTERNAL;
+    VALIDATION, INTERNAL, EXTERNAL
 }

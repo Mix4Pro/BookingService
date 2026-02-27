@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table (name = "booking_history")
+@Table(name = "booking_history")
 @Getter
 @Setter
 @Builder

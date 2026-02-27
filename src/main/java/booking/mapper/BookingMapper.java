@@ -1,6 +1,5 @@
 package booking.mapper;
 
-import booking.dto.event.NotificationEvent;
 import booking.dto.response.bookingResponse.BookingResponseDto;
 import booking.entity.BookingEntity;
 import org.mapstruct.Mapper;
@@ -12,6 +11,6 @@ public interface BookingMapper {
     @Mapping(target = "roomId", source = "room.id")
     @Mapping(target = "rateId", source = "rate.id")
     @Mapping(target = "cancellationPolicyId", source = "cancellationPolicy.id")
-    BookingResponseDto toResponseFromEntity (BookingEntity bookingEntity);
+    BookingResponseDto toResponseFromEntity(BookingEntity bookingEntity);
 
 }

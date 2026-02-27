@@ -3,7 +3,6 @@ package booking.dto.request;
 import booking.constant.enums.CurrencyType;
 import booking.constant.enums.TransactionType;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 
 import java.util.UUID;
 
