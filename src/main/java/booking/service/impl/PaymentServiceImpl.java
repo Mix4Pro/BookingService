@@ -130,9 +130,9 @@ public class PaymentServiceImpl implements PaymentService {
         );
 
         BigDecimal chargedAmount = switch (booking.getPaymentPlan()) {
-            case PREPAYMENT -> booking.getPrepaymentAmount();  // 30%
-            case FULL -> booking.getTotalAmount();        // 100%
-            case NO_PREPAY -> BigDecimal.ZERO;                 // не достигнем
+            case PREPAYMENT -> booking.getPrepaymentAmount(); // 30%
+            case FULL -> booking.getTotalAmount(); // 100%
+            case NO_PREPAY -> BigDecimal.ZERO;
         };
 
 
