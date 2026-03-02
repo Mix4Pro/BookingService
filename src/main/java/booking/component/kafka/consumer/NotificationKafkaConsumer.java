@@ -16,7 +16,6 @@ import org.springframework.web.client.RestClient;
 @RequiredArgsConstructor
 @Slf4j
 public class NotificationKafkaConsumer {
-    private final RestClient notificationRestClient;
     private final NotificationAdapter notificationAdapter;
 
     @KafkaListener(

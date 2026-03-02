@@ -55,16 +55,13 @@ public class BookingServiceImpl implements BookingService {
         }
 
         // Creating hold
-        log.info("roomId {}", bookingRequestDto.roomId());
         RoomEntity room = roomRepository.findById(bookingRequestDto.roomId())
                 .orElseThrow(() -> new RoomNotFoundException("Room not found", HttpStatus.NOT_FOUND));
 
-        log.info("roomId {}", bookingRequestDto.userId());
         UserEntity user = userRepository.findById(bookingRequestDto.userId())
                 .orElseThrow(() -> new UserNotFoundException("User not found", HttpStatus.NOT_FOUND));
 
 
-        log.info("roomId {}", bookingRequestDto.rateId());
         RateEntity rate = rateRepository.findById(bookingRequestDto.rateId())
                 .orElseThrow(() -> new RateNotFoundException("Rate not found", HttpStatus.NOT_FOUND));
 

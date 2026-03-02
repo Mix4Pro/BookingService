@@ -57,5 +57,4 @@ public class RoomServiceImpl implements RoomService {
                 rooms.getTotalPages()
         );
     }
-
 }
