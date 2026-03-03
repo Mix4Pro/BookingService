@@ -182,7 +182,6 @@ class PaymentServiceTest {
 
         paymentService.refund(1L);
 
-        // prepaymentAmount=150, policy=100% → refund=150
         verify(paymentHistoryRepository).save(argThat(p ->
             p.getAmount().compareTo(new BigDecimal("150.00")) == 0
         ));
